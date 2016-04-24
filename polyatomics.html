@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Poly Atomic Ions</title>
+    <style>
+      body{background-color: #f2f2f2;}
+      #play{font-size: 44px;}
+      #answer{font-size: 52px;}
+      sub, sup{font-size: 22px;}
+      #input{height: 22px;}
+      table{position: absolute; margin: auto; top: -15%; left: 45%; right: 0; bottom: 0;}
+      table td{padding: 5% 0;}
+      #correct{color: black; font-size: 22px;}
+      #incorrect{color: red; font-size: 22px;}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        
+        var polyNames = ['Acetate', 'Bromate', 'Bromite', 'Chlorate', 'Chlorite', 'Chromite', 'Cyanide', 'Bicarbonate',
+            'Bisulfate', 'Hydroxide', 'Hypochlorite', 'Nitrate', 'Nitrite', 'Perchlorate', 'Permanganate', 'Thiocyanate',
+            'Phosphate', 'Phosphite', 'Carbonate', 'Chromate', 'Dichromate', 'Oxalate', 'Sulfate', 'Sulfite', 'Thiosulfate',
+            'Thiosulfate', 'Ammonium', 'Hydronium'];
+            
+        var polys = {
+          acetate: 'CH<sub>3</sub>COO<sup>-</sup>',
+          bromate: 'BrO<sub>3</sub><sup>-</sup>',
+          bromite: 'BrO<sub>2</sub><sup>-</sup>',
+          chlorate: 'ClO<sub>3</sub><sup>-</sup>',
+          chlorite: 'ClO<sub>2</sub><sup>-</sup>',
+          chromite: 'CrO<sub>2</sub><sup>-</sup>',
+          cyanide: 'CN<sup>-</sup>',
+          bicarbonate: 'HCO<sub>3</sub><sup>-</sup>',
+          bisulfate: 'HSO<sub>4</sub><sup>-</sup>',
+          hydroxide: 'OH<sup>-</sup>',
+          hypochlorite: 'ClO<sup>-</sup>',
+          nitrate: 'NO<sub>3</sub><sup>-</sup>',
+          nitrite: 'NO<sub>2</sub><sup>-</sup>',
+          perchlorate: 'ClO<sub>4</sub><sup>-</sup>',
+          permanganate: 'MnO<sub>4</sub><sup>-</sup>',
+          thiocyanate: 'SCN<sup>-</sup>',
+          carbonate: 'CO<sub>3</sub><sup>-2</sup>',
+          chromate: 'CrO<sub>4</sub><sup>-2</sup>',
+          dichromate: 'Cr<sub>2</sub>O<sub>7</sub><sup>-2</sup>',
+          oxalate: 'C<sub>2</sub>O<sub>4</sub><sup>-2</sup>',
+          sulfate: 'SO<sub>4</sub><sup>-2</sup>',
+          sulfite: 'SO<sub>3</sub><sup>-2</sup>',
+          thiosulfate: 'S<sub>2</sub>O<sub>3</sub><sup>-2</sup>',
+          phosphate : 'PO<sub>4</sub><sup>-3</sup>',
+          phosphite: 'PO<sub>3</sub><sup>-3</sup>',
+          ammonium: 'NH<sub>4</sub><sup>+</sup>',
+          hydronium: 'H<sub>3</sub>O<sup>+</sup>'
+        };
+        
+        Array.prototype.remove = function(from, to) {
+          var rest = this.slice((to || from) + 1 || this.length);
+          this.length = from < 0 ? this.length + from : from;
+          return this.push.apply(this, rest);
+        };
+        
+        var correct = 0;
+        var incorrect = 0;
+        
+        var random = parseInt(Math.random() * polyNames.length);
+        var answer = polyNames[random].trim();
+        $('#play').append(polys[answer.toLowerCase()]);
+        $('#correct').append('Correct: ' + correct);
+        $('#incorrect').append('Incorrect: ' + incorrect);
+        
+        function reset(){
+          $('table').css('left', '45%');
+          
+          $('#play').empty();
+          $('#answer').empty();
+          $('#input').val('');
+          $('#correct').empty();
+          $('#correct').append('Correct: ' + correct);
+          $('#incorrect').empty();
+          $('#incorrect').append('Incorrect: ' + incorrect);
+          
+          random = parseInt(Math.random() * polyNames.length);
+          answer = polyNames[random].trim();
+          $('#play').append(polys[answer.toLowerCase()]);
+        }
+        
+        $('#input').keyup(function(e){
+          
+          if(e.keyCode == 13){
+            
+            var guess = $(this)[0].value.trim().toLowerCase();
+            
+            if(guess === answer.toLowerCase()){
+              $('#answer').css('color', 'lime');
+              if(answer.length >= 8)
+                $('table').css('left', '44%');
+              $('#answer').append(answer);
+              correct++;
+              polyNames.remove(random);
+            }else{
+              $('#answer').css('color', 'red');
+              if(answer.length >= 8)
+                $('table').css('left', '44%');
+              $('#answer').append(answer);
+              incorrect++;
+            }
+            
+            if(polyNames.length < 1){
+              alert('You were correct ' + (correct/(correct+incorrect))*100 + '% of the time');
+            }else{
+              setTimeout(reset, 1200);
+            }
+            
+          }
+          
+        });
+        
+      });
+    </script>
+  </head>
+  <body>
+    <div id="correct"></div>
+    <div id="incorrect"></div>
+    <table>
+      <tr><td align="center"><div id="play"></div></td></tr>
+      <tr><td align="center"><input id="input" type="text"></td></tr>
+      <tr><td align="center"><div id="answer"></div></td></tr>
+    </table>
+  </body>
+</html>
